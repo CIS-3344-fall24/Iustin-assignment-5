@@ -18,8 +18,8 @@ app.use(
 // Function is asynchronous, which allows the use of await to handle asynchronous operations.
 app.get("/api/data", async (req, res) => {
     // Extracts the query and filter parameter from the incoming request URL, which specifies the month of data to retrieve from the external API.
-    const {query, filter} = req.query;
-    const response = await fetch(`https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${query}&fq=${filter}&api-key=${apiKey}`)
+    const {month} = req.query;
+    const response = await fetch(`https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${month}&api-key=${apiKey}`)
     //Sends the JSON data back to the client as the response to the original GET request
     const data = await response.json();
     res.json(data)
