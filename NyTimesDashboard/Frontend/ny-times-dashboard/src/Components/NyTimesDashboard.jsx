@@ -32,4 +32,39 @@ const NyTimesDashboard = () => {
                 console.log(error);
             });
     };
-}
+
+    // Create the form
+    return (
+        <div>
+            {/* Title */}
+            <h1>New York Times Article Search</h1>
+
+            {/* Create the form that includes the button and the user input to search articles */}
+            <form>
+                <input type={"text"}
+                       name={"article_search"}
+                       id={"article_search"}
+                       onChange={handleInput}
+                />
+                <button onClick={getArticles}>
+                    Search
+                </button>
+            </form>
+
+            {articles && (
+                <div>
+                    {articles.map((articles, index) => (
+                        <div key={index}>
+                            <h2>{articles.headline.main}</h2>
+                            <p>{articles.abstrack}</p>
+                            <p>{articles.source}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+
+    );
+};
+
+export default NyTimesDashboard;
