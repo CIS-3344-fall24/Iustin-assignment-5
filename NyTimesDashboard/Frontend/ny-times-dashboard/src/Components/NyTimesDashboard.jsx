@@ -2,33 +2,39 @@ import React, { useState } from "react";
 
 const NyTimesDashboard = () => {
     const [beginDate, setBeginDate] = useState('');
-    const [articles, setArticles] = useState(null);
+    const [articles, setArticles] = useState([]);
 
     const handleInput = (event) => {
         setBeginDate(event.target.value);
     };
 
-    const fetchArticles = async (event) => {
+    const fetchArticles = (event) => {
+
         if (event) {
             event.preventDefault();
         }
-        const response = await fetch(`${process.env.REACT_APP_API_ENDPOINT}?q=${beginDate}`, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
 
+        fetch(`${process.env.REACT_APP_API_ENDPOINT}?begin_date=${beginDate}`)
             .then((response) => {
-                if (!response.ok) throw new Error(`Error fetching data`);
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                console.log(response);
                 return response.json();
             })
             .then((data) => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
                 setArticles(data.response.docs);
+                console.log(data);
             })
             .catch((error) => {
-                console.error(error.message);
+                console.error("Error fetching articles:", error);
             });
     };
+
 
     return (
         <div>
