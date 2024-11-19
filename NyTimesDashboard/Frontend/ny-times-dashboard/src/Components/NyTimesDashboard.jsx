@@ -5,33 +5,27 @@ const NyTimesDashboard = () => {
     const [articles, setArticles] = useState([]);
 
     const handleInput = (event) => {
-        setBeginDate(event.target.value);
+        // Validate input to match YYYYMMDD pattern
+        const input = event.target.value;
+        if (/^\d{0,8}$/.test(input)) {
+            setBeginDate(input); // Only allow up to 8 digits
+        }
     };
 
     const fetchArticles = (event) => {
-
         if (event) {
             event.preventDefault();
         }
-
         fetch(`${process.env.REACT_APP_API_ENDPOINT}?begin_date=${beginDate}`)
             .then((response) => {
-
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
-                }
-                console.log(response);
+                if (!response.ok) throw new Error(`Error fetching data`);
                 return response.json();
             })
             .then((data) => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
                 setArticles(data.response.docs);
-                console.log(data);
             })
             .catch((error) => {
-                console.error("Error fetching articles:", error);
+                console.error(error.message);
             });
     };
 
